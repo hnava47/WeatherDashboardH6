@@ -1,5 +1,9 @@
-.nav-bk3{
+.nav-bk3 {
     background: #1e0055;
     background: -webkit-linear-gradient(to right, #0575E6, #1e0055);
     background: linear-gradient(to right, #0575E6, #1e0055);
-    }
+}
+
+p {
+    font-size: 20px;
+}
