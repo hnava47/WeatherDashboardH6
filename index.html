@@ -18,12 +18,14 @@
             <div class="col-3">
                 <div class="border-bottom border-dark">
                     <h2 class="font-weight-bold">Search for City:</h2>
-                    <div class="input-group input-group-lg my-3">
-                        <input type="text" class="form-control" placeholder="Search" aria-label="Search" aria-describedby="inputGroup-sizing-lg">
-                    </div>
-                    <div class="mb-3">
-                        <button type="button" class="btn btn-primary btn-lg btn-block" disabled>Search</button>
-                    </div>
+                    <form id="searchForm">
+                        <div class="input-group input-group-lg my-3">
+                            <input id="searchInput" type="text" class="form-control" placeholder="Search" aria-label="Search" aria-describedby="inputGroup-sizing-lg">
+                        </div>
+                        <div class="mb-3">
+                            <button id="searchBtn" type="submit" class="btn btn-primary btn-lg btn-block" disabled>Search</button>
+                        </div>
+                    </form>
                 </div>
             </div>
             <div class="col mr-3">
