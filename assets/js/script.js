@@ -4,8 +4,8 @@ $(document).ready(function() {
     const $searchBtn = $('#searchBtn');
     const $searchForm = $('#searchForm');
 
-    function currentRequest(cityLat, cityLon) {
-        let requestUrl = 'http://api.openweathermap.org/data/2.5/weather?lat=' + cityLat + '&lon=' + cityLon + '&appid=' + apiKey;
+    function oneCallRequest(cityLat, cityLon) {
+        let requestUrl = 'https://api.openweathermap.org/data/2.5/onecall?lat=' + cityLat + '&lon=' + cityLon + '&exclude=minutely,hourly&appid=' + apiKey;
 
         $.ajax({
             url: requestUrl,
@@ -32,7 +32,7 @@ $(document).ready(function() {
             method: 'GET'
         }).then(function(response) {
             if (response.length > 0) {
-                weatherRequest(response[0].lat, response[0].lon);
+                oneCallRequest(response[0].lat, response[0].lon);
             } else {
                 return console.log('no');
             };
