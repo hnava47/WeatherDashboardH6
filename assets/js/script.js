@@ -4,7 +4,7 @@ $(document).ready(function() {
     const $searchBtn = $('#searchBtn');
     const $searchForm = $('#searchForm');
 
-    function weatherRequest(cityLat, cityLon) {
+    function currentRequest(cityLat, cityLon) {
         let requestUrl = 'http://api.openweathermap.org/data/2.5/weather?lat=' + cityLat + '&lon=' + cityLon + '&appid=' + apiKey;
 
         $.ajax({
