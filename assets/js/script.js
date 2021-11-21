@@ -50,7 +50,12 @@ $(document).ready(function() {
     $searchForm.on('submit', function(event) {
         event.preventDefault();
 
-        let cityVar = $searchInput.val().toLowerCase().replace(/ /g,'');
+        let cityArray = $searchInput.val().toLowerCase().split(',');
+
+        for (let i = 0; i < cityArray.length; i++) {
+            cityArray[i] = cityArray[i].trim().replace(/ /g,'%20');
+        };
+        let cityVar = cityArray.join(',');
         let cityValUrl = 'http://api.openweathermap.org/geo/1.0/direct?q=' + cityVar + '&appid=' + apiKey;
 
         $.ajax({
