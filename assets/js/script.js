@@ -9,6 +9,11 @@ $(document).ready(function() {
     const $currWindEl = $('#wind');
     const $currHumidEl = $('#humid');
     const $currUviEl = $('#uvi');
+    const $fcDateEl = $('.fcDate');
+    const $fcTempEl = $('.fcTemp');
+    const $fcWindEl = $('.fcWind');
+    const $fcHumidEl = $('.fcHumid');
+    const $fcIconEl = $('.fcIcon');
 
     function oneCallRequest(cityLat, cityLon) {
         let requestUrl = 'https://api.openweathermap.org/data/2.5/onecall?lat=' + cityLat + '&lon=' + cityLon + '&units=imperial&exclude=minutely,hourly&appid=' + apiKey;
@@ -25,6 +30,15 @@ $(document).ready(function() {
                 currUvi: response.current.uvi,
                 currIconUrl: 'http://openweathermap.org/img/w/' + response.current.weather[0].icon + '.png'
             };
+
+            for (let i = 1; i < 6; i++) {
+                details['fCastDate_' + i] = moment.unix(response.daily[i].dt).format('MM/DD/YYYY');
+                details['fCastTemp_' + i] = response.daily[i].temp.day;
+                details['fCastWind_' + i] = response.daily[i].wind_speed;
+                details['fCastHumid_' + i] = response.daily[i].humidity;
+                details['fCastIcon_' + i] = 'http://openweathermap.org/img/w/' + response.daily[i].weather[0].icon + '.png'
+            };
+
             return details;
         });
     };
@@ -70,6 +84,15 @@ $(document).ready(function() {
                         $currUviEl.addClass('bg-warning');
                     } else {
                         $currUviEl.addClass('bg-danger');
+                    };
+
+                    for (let i = 0; i < 5; i++) {
+                        let forecastDay = i + 1;
+                        let indexDate = 'fCastDate_' + forecastDay
+                        let indexTemp = 'fCastTemp_' + forecastDay
+
+                        $fcDateEl[i].textContent = results[indexDate];
+                        $fcTempEl[i].textContent = results[indexTemp] + '℉';
                     };
 
                 });
