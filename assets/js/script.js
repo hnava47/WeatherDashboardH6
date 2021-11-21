@@ -77,7 +77,7 @@ $(document).ready(function() {
                     $currTempEl.text(results.currTemp + '℉');
                     $currWindEl.text(results.currWind + ' MPH');
                     $currHumidEl.text(results.currHumid + '%');
-                    $currUviEl.text(results.currUvi)
+                    $currUviEl.text(results.currUvi);
                     if (results.currUvi <= 2) {
                         $currUviEl.addClass('bg-success');
                     } else if (results.currUvi > 2 && results.currUvi <= 7) {
@@ -88,11 +88,17 @@ $(document).ready(function() {
 
                     for (let i = 0; i < 5; i++) {
                         let forecastDay = i + 1;
-                        let indexDate = 'fCastDate_' + forecastDay
-                        let indexTemp = 'fCastTemp_' + forecastDay
+                        let indexDate = 'fCastDate_' + forecastDay;
+                        let indexTemp = 'fCastTemp_' + forecastDay;
+                        let indexWind = 'fCastWind_' + forecastDay;
+                        let indexHumid = 'fCastHumid_' + forecastDay;
+                        let indexIcon = 'fCastIcon_' + forecastDay;
 
                         $fcDateEl[i].textContent = results[indexDate];
                         $fcTempEl[i].textContent = results[indexTemp] + '℉';
+                        $fcWindEl[i].textContent = results[indexWind] + ' MPH';
+                        $fcHumidEl[i].textContent = results[indexHumid] + '%';
+                        $fcIconEl[i].src = results[indexIcon];
                     };
 
                 });
