@@ -1,7 +1,7 @@
 $(document).ready(function() {
     const apiKey = 'dbc8f4367562773a8c66b15cdd9ed6f5';
     const $searchInput = $('#searchInput');
-    const $alertBanner = $('#alert');
+    const $infoBanner = $('#info');
     const $searchBtn = $('#searchBtn');
     const $searchForm = $('#searchForm');
     const $currNameEl = $('#currentName');
@@ -45,7 +45,7 @@ $(document).ready(function() {
     };
 
     $searchInput.on('click', function() {
-        $alertBanner.show();
+        $infoBanner.show();
     });
 
     $searchInput.on('input', function() {
@@ -54,6 +54,8 @@ $(document).ready(function() {
 
     $searchForm.on('submit', function(event) {
         event.preventDefault();
+
+        $infoBanner.hide();
 
         let cityArray = $searchInput.val().toLowerCase().split(',');
 
