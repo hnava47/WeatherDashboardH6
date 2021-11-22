@@ -16,6 +16,25 @@ $(document).ready(function() {
     const $fcWindEl = $('.fcWind');
     const $fcHumidEl = $('.fcHumid');
     const $fcIconEl = $('.fcIcon');
+    let cityList = [];
+
+    $.ajax({
+        dataType: 'json',
+        url: './assets/js/city.list.json'
+    }).then(function(response) {
+        for (var i = 0; i < response.length; i++) {
+            if (response[i].state.length === 0) {
+                cityList.push(response[i].name + ', ' + response[i].country);
+            } else {
+                cityList.push(response[i].name + ', ' + response[i].state + ', ' + response[i].country);
+            };
+        }
+        $(function() {
+            $searchInput.autocomplete({
+                source: cityList
+            });
+        });
+    });
 
     function oneCallRequest(cityLat, cityLon) {
         let requestUrl = 'https://api.openweathermap.org/data/2.5/onecall?lat=' + cityLat + '&lon=' + cityLon + '&units=imperial&exclude=minutely,hourly&appid=' + apiKey;
