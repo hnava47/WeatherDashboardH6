@@ -1,6 +1,7 @@
 $(document).ready(function() {
     const apiKey = 'dbc8f4367562773a8c66b15cdd9ed6f5';
     const $searchInput = $('#searchInput');
+    const $alertBanner = $('#alert');
     const $searchBtn = $('#searchBtn');
     const $searchForm = $('#searchForm');
     const $currNameEl = $('#currentName');
@@ -42,6 +43,10 @@ $(document).ready(function() {
             return details;
         });
     };
+
+    $searchInput.on('click', function() {
+        $alertBanner.show();
+    });
 
     $searchInput.on('input', function() {
         $searchBtn.prop('disabled', false);
