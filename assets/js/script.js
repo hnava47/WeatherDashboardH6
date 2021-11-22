@@ -42,8 +42,8 @@ $(document).ready(function() {
             }
 
             return details;
-        }).catch(function (err) {
-            console.log(err);
+        }).catch(function (error) {
+            console.log(error);
         });
     };
 
@@ -119,10 +119,10 @@ $(document).ready(function() {
 
                 });
             } else {
-                return console.log('no');
+                $errBanner.show();
             };
         }).catch(function(error) {
-            console.log(error);
+            $errBanner.show();
         });
     });
 });
