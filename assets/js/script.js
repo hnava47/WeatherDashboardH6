@@ -2,6 +2,7 @@ $(document).ready(function() {
     const apiKey = 'dbc8f4367562773a8c66b15cdd9ed6f5';
     const $searchInput = $('#searchInput');
     const $infoBanner = $('#info');
+    const $errBanner = $('#error');
     const $searchBtn = $('#searchBtn');
     const $searchForm = $('#searchForm');
     const $currNameEl = $('#currentName');
@@ -38,9 +39,11 @@ $(document).ready(function() {
                 details['fCastWind_' + i] = response.daily[i].wind_speed;
                 details['fCastHumid_' + i] = response.daily[i].humidity;
                 details['fCastIcon_' + i] = 'http://openweathermap.org/img/w/' + response.daily[i].weather[0].icon + '.png'
-            };
+            }
 
             return details;
+        }).catch(function (err) {
+            console.log(err);
         });
     };
 
@@ -98,6 +101,7 @@ $(document).ready(function() {
                         $currUviEl.addClass('bg-danger');
                     };
 
+                    // Populating forecast weather details for selected location
                     for (let i = 0; i < 5; i++) {
                         let forecastDay = i + 1;
                         let indexDate = 'fCastDate_' + forecastDay;
