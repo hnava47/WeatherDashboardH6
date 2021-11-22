@@ -58,6 +58,7 @@ $(document).ready(function() {
     $searchForm.on('submit', function(event) {
         event.preventDefault();
 
+        $searchInput.css("outline-style", "none");
         $infoBanner.hide();
 
         let cityArray = $searchInput.val().toLowerCase().split(',');
@@ -72,6 +73,7 @@ $(document).ready(function() {
             url: cityValUrl,
             method: 'GET'
         }).then(function(response) {
+            $errBanner.hide();
             if (response.length > 0) {
                 oneCallRequest(response[0].lat, response[0].lon).then(function(results) {
                     let cityName = response[0].name;
@@ -122,6 +124,10 @@ $(document).ready(function() {
                 $errBanner.show();
             };
         }).catch(function(error) {
+            $searchInput.css({
+                'outline-style': 'solid',
+                'outline-color': 'red'
+            });
             $errBanner.show();
         });
     });
