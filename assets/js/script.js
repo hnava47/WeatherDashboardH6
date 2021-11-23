@@ -16,12 +16,12 @@ $(document).ready(function() {
     const $fcWindEl = $('.fcWind');
     const $fcHumidEl = $('.fcHumid');
     const $fcIconEl = $('.fcIcon');
-    let cityList = [];
 
     $.ajax({
         dataType: 'json',
         url: './assets/js/city.list.json'
     }).then(function(response) {
+        let cityList = [];
         for (var i = 0; i < response.length; i++) {
             if (response[i].state.length === 0) {
                 cityList.push(response[i].name + ', ' + response[i].country);
@@ -31,6 +31,8 @@ $(document).ready(function() {
         }
         $(function() {
             $searchInput.autocomplete({
+                minLength: 4,
+                delay: 500,
                 source: cityList
             });
         });
