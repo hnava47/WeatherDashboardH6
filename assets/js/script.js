@@ -24,14 +24,16 @@ $(document).ready(function() {
         dataType: 'json',
         url: './assets/js/city.list.json'
     }).then(function(response) {
-        let cityList = [];
+        let citySet = new Set();
         for (var i = 0; i < response.length; i++) {
             if (response[i].state.length === 0) {
-                cityList.push(response[i].name + ', ' + response[i].country);
+                citySet.add(response[i].name + ', ' + response[i].country);
             } else {
-                cityList.push(response[i].name + ', ' + response[i].state + ', ' + response[i].country);
+                citySet.add(response[i].name + ', ' + response[i].state + ', ' + response[i].country);
             };
         }
+        let cityList = [...citySet];
+        console.log(cityList)
         $(function() {
             $searchInput.autocomplete({
                 minLength: 4,
