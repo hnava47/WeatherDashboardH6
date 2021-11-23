@@ -48,15 +48,19 @@
                     </button>
                 </div>
                 <div id="favorites" class="list-group custom-shadow">
-                    <button type="button" class="list-group-item list-group-item-action">Dapibus ac facilisis in</button>
-                    <button type="button" class="list-group-item list-group-item-action">Morbi leo risus</button>
-                    <button type="button" class="list-group-item list-group-item-action">Porta ac consectetur ac</button>
+                    <button type="button" class="list-group-item list-group-item-action custom-fav">Morbi leo risus</button>
+                    <button type="button" class="list-group-item list-group-item-action custom-fav">Porta ac consectetur ac</button>
                 </div>
             </div>
             <div class="col mr-3">
                 <div class="border border-dark rounded custom-shadow">
                     <div class="ml-3">
-                        <h1 id="currentName" class="font-weight-bold"><img id="currentIcon" src=""></h1>
+                        <div class="font-weight-bold form-inline">
+                            <h1 id="currentName"></h1>
+                            &nbsp;
+                            <h1 id="currentDate"></h1>
+                            <img id="currentIcon" src="" />
+                        </div>
                         <div class="my-4">
                             <div class="form-inline">
                                 <p>Temp:&nbsp;</p>
