@@ -37,7 +37,6 @@ $(document).ready(function() {
         $(function() {
             $searchInput.autocomplete({
                 minLength: 4,
-                delay: 500,
                 source: cityList
             });
         });
@@ -167,15 +166,6 @@ $(document).ready(function() {
                 'outline-color': 'red'
             });
             $errBanner.show();
-        });
-    });
-
-    $(document).on('click', '.custom-fav', function() {
-        let selected = this
-        $minusEl.prop('disabled', false);
-
-        $minusEl.on('click', function() {
-            selected.remove();
         });
     });
 });
