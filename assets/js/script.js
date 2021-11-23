@@ -5,6 +5,9 @@ $(document).ready(function() {
     const $errBanner = $('#error');
     const $searchBtn = $('#searchBtn');
     const $searchForm = $('#searchForm');
+    const $plusEl = $('#plus');
+    const $minusEl = $('#minus');
+    const $favoritesEL = $('#favorites');
     const $currNameEl = $('#currentName');
     const $currIconEl = $('#currentIcon');
     const $currTempEl = $('#temp');
