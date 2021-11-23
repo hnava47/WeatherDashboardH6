@@ -143,7 +143,21 @@ $(document).ready(function() {
                     $fcIconEl[i].src = results[indexIcon];
                 };
 
-                $plusEl.prop('disabled', false);
+                let $favBtn = $('<button>');
+                let $cityDesc = $('<div>');
+                let $cityTemp = $('<div>');
+                let $cityIcon = $('<img>');
+
+                $cityDesc.text($currNameEl.text())
+                    .addClass('flex-grow-1');
+                $cityTemp.text($currTempEl.text());
+                $cityIcon.attr('src', $currIconEl.attr('src'));
+
+                $favBtn.attr('type', 'button')
+                    .addClass('d-flex align-items-center list-group-item list-group-item-action custom-fav')
+                    .append($cityDesc, $cityTemp, $cityIcon);
+
+                $favoritesEL.prepend($favBtn);
 
             });
         }).catch(function(error) {
@@ -154,26 +168,6 @@ $(document).ready(function() {
             });
             $errBanner.show();
         });
-    });
-
-    $plusEl.on('click', function() {
-        let $favBtn = $('<button>');
-        let $cityDesc = $('<div>');
-        let $cityTemp = $('<div>');
-        let $cityIcon = $('<img>');
-
-        $cityDesc.text($currNameEl.text())
-            .addClass('flex-grow-1');
-        $cityTemp.text($currTempEl.text());
-        $cityIcon.attr('src', $currIconEl.attr('src'));
-
-        $favBtn.attr('type', 'button')
-            .addClass('d-flex align-items-center list-group-item list-group-item-action custom-fav')
-            .append($cityDesc, $cityTemp, $cityIcon);
-
-        $favoritesEL.prepend($favBtn);
-
-
     });
 
     $(document).on('click', '.custom-fav', function() {
