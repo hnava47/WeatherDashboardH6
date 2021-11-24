@@ -18,6 +18,10 @@ $(document).ready(function() {
     const $fcWindEl = $('.fcWind');
     const $fcHumidEl = $('.fcHumid');
     const $fcIconEl = $('.fcIcon');
+    let weather = JSON.parse(localStorage.getItem('location')) || [];
+
+    refreshFavorites();
+    generateFavorites();
 
     $.ajax({
         dataType: 'json',
@@ -34,11 +38,76 @@ $(document).ready(function() {
         let cityList = [...citySet];
         $(function() {
             $searchInput.autocomplete({
-                minLength: 4,
+                minLength: 5,
                 source: cityList
             });
         });
     });
+
+    function refreshFavorites() {
+        // Update existing localStorage with updated weather details
+        for (let i = 0; i < weather.length; i++) {
+            oneCallRequest(weather[i].lat, weather[i].lon).then(function(updateDetails) {
+                weather[i].temp = updateDetails.currTemp;
+                weather[i].icon = updateDetails.currIconUrl;
+            });
+        };
+    };
+
+    function generateFavorites() {
+        $favoritesEL.children().remove();
+        for (let i = 0; i < weather.length; i++) {
+            let $favBtn = $('<button>');
+            let $cityDesc = $('<div>');
+            let $cityTemp = $('<div>');
+            let $cityIcon = $('<img>');
+
+            $cityDesc.text(weather[i].city)
+                .addClass('flex-grow-1');
+            $cityTemp.text(weather[i].temp);
+            $cityIcon.attr('src', weather[i].icon);
+
+            $favBtn.attr('type', 'button')
+                .addClass('d-flex align-items-center list-group-item list-group-item-action custom-fav')
+                .append($cityDesc, $cityTemp, $cityIcon);
+
+            $favoritesEL.append($favBtn);
+        };
+    };
+
+    function populateWeather(results) {
+        $currIconEl.attr('src', results.currIconUrl);
+        $currDateEl.text('(' + results.currDate + ')');
+
+        // Populating current weather details for selected location
+        $currTempEl.text(results.currTemp + '℉');
+        $currWindEl.text(results.currWind + ' MPH');
+        $currHumidEl.text(results.currHumid + '%');
+        $currUviEl.text(results.currUvi);
+        if (results.currUvi <= 2) {
+            $currUviEl.addClass('bg-success');
+        } else if (results.currUvi > 2 && results.currUvi <= 7) {
+            $currUviEl.addClass('bg-warning');
+        } else {
+            $currUviEl.addClass('bg-danger');
+        };
+
+        // Populating forecast weather details for selected location
+        for (let i = 0; i < 5; i++) {
+            let forecastDay = i + 1;
+            let indexDate = 'fCastDate_' + forecastDay;
+            let indexTemp = 'fCastTemp_' + forecastDay;
+            let indexWind = 'fCastWind_' + forecastDay;
+            let indexHumid = 'fCastHumid_' + forecastDay;
+            let indexIcon = 'fCastIcon_' + forecastDay;
+
+            $fcDateEl[i].textContent = results[indexDate];
+            $fcTempEl[i].textContent = results[indexTemp] + '℉';
+            $fcWindEl[i].textContent = results[indexWind] + ' MPH';
+            $fcHumidEl[i].textContent = results[indexHumid] + '%';
+            $fcIconEl[i].src = results[indexIcon];
+        };
+    };
 
     function oneCallRequest(cityLat, cityLon) {
         let requestUrl = 'https://api.openweathermap.org/data/2.5/onecall?lat=' + cityLat + '&lon=' + cityLon + '&units=imperial&exclude=minutely,hourly&appid=' + apiKey;
@@ -48,6 +117,8 @@ $(document).ready(function() {
             method: 'GET',
         }).then(function(response) {
             let details = {
+                lat:response.lat,
+                lon: response.lon,
                 currDate: moment.unix(response.current.dt).format('MM/DD/YYYY'),
                 currTemp: response.current.temp,
                 currWind: response.current.wind_speed,
@@ -97,12 +168,9 @@ $(document).ready(function() {
             method: 'GET'
         }).then(function(response) {
             $errBanner.hide();
-            oneCallRequest(response[0].lat, response[0].lon).then(function(results) {
+            oneCallRequest(response[0].lat, response[0].lon).then(function(respDetails) {
                 let cityName = response[0].name;
                 let cityCountry = response[0].country;
-
-                $currIconEl.attr('src', results.currIconUrl);
-                $currDateEl.text('(' + results.currDate + ')');
 
                 if ('state' in response[0]) {
                     let cityState = response[0].state;
@@ -111,51 +179,26 @@ $(document).ready(function() {
                     $currNameEl.text(cityName + ', ' + cityCountry);
                 };
 
-                // Populating current weather details for selected location
-                $currTempEl.text(results.currTemp + '℉');
-                $currWindEl.text(results.currWind + ' MPH');
-                $currHumidEl.text(results.currHumid + '%');
-                $currUviEl.text(results.currUvi);
-                if (results.currUvi <= 2) {
-                    $currUviEl.addClass('bg-success');
-                } else if (results.currUvi > 2 && results.currUvi <= 7) {
-                    $currUviEl.addClass('bg-warning');
-                } else {
-                    $currUviEl.addClass('bg-danger');
+                populateWeather(respDetails);
+
+                // Remove latest location if list gets larger than 6
+                if (weather.length === 6) {
+                    weather.pop();
                 };
 
-                // Populating forecast weather details for selected location
-                for (let i = 0; i < 5; i++) {
-                    let forecastDay = i + 1;
-                    let indexDate = 'fCastDate_' + forecastDay;
-                    let indexTemp = 'fCastTemp_' + forecastDay;
-                    let indexWind = 'fCastWind_' + forecastDay;
-                    let indexHumid = 'fCastHumid_' + forecastDay;
-                    let indexIcon = 'fCastIcon_' + forecastDay;
-
-                    $fcDateEl[i].textContent = results[indexDate];
-                    $fcTempEl[i].textContent = results[indexTemp] + '℉';
-                    $fcWindEl[i].textContent = results[indexWind] + ' MPH';
-                    $fcHumidEl[i].textContent = results[indexHumid] + '%';
-                    $fcIconEl[i].src = results[indexIcon];
+                let currentLoc = {
+                    city: $currNameEl.text(),
+                    temp: respDetails.currTemp,
+                    icon: respDetails.currIconUrl,
+                    lat: response[0].lat,
+                    lon: response[0].lon
                 };
 
-                let $favBtn = $('<button>');
-                let $cityDesc = $('<div>');
-                let $cityTemp = $('<div>');
-                let $cityIcon = $('<img>');
+                weather.unshift(currentLoc);
 
-                $cityDesc.text($currNameEl.text())
-                    .addClass('flex-grow-1');
-                $cityTemp.text($currTempEl.text());
-                $cityIcon.attr('src', $currIconEl.attr('src'));
+                localStorage.setItem('location', JSON.stringify(weather));
 
-                $favBtn.attr('type', 'button')
-                    .addClass('d-flex align-items-center list-group-item list-group-item-action custom-fav')
-                    .append($cityDesc, $cityTemp, $cityIcon);
-
-                $favoritesEL.prepend($favBtn);
-
+                generateFavorites();
             });
         }).catch(function(error) {
             console.log(error);
