@@ -20,13 +20,16 @@ $(document).ready(function() {
     const $fcIconEl = $('.fcIcon');
     let weather = JSON.parse(localStorage.getItem('location')) || [];
 
+    // Init page
     refreshFavorites();
     generateFavorites();
 
+    // Create reference list for autocomplete
     $.ajax({
         dataType: 'json',
         url: './assets/js/city.list.json'
     }).then(function(response) {
+        // Use set to remove duplicate location names
         let citySet = new Set();
         for (var i = 0; i < response.length; i++) {
             if (response[i].state.length === 0) {
@@ -35,7 +38,9 @@ $(document).ready(function() {
                 citySet.add(response[i].name + ', ' + response[i].state + ', ' + response[i].country);
             };
         }
+        // Change set to list so it can be referenced by autocomplete
         let cityList = [...citySet];
+        // Generate function for autocomplete
         $(function() {
             $searchInput.autocomplete({
                 minLength: 5,
@@ -44,6 +49,7 @@ $(document).ready(function() {
         });
     });
 
+    // Updates favorites in local storage with updated weather details
     function refreshFavorites() {
         // Update existing localStorage with updated weather details
         for (let i = 0; i < weather.length; i++) {
@@ -52,8 +58,10 @@ $(document).ready(function() {
                 weather[i].icon = updateDetails.currIconUrl;
             });
         };
+        localStorage.setItem('location', JSON.stringify(weather));
     };
 
+    // Generate favorites list on page
     function generateFavorites() {
         $favoritesEL.children().remove();
         for (let i = 0; i < weather.length; i++) {
@@ -67,7 +75,10 @@ $(document).ready(function() {
             $cityTemp.text(weather[i].temp);
             $cityIcon.attr('src', weather[i].icon);
 
-            $favBtn.attr('type', 'button')
+            $favBtn.attr({
+                'id': i,
+                'type': 'button'
+            })
                 .addClass('d-flex align-items-center list-group-item list-group-item-action custom-fav')
                 .append($cityDesc, $cityTemp, $cityIcon);
 
@@ -75,6 +86,7 @@ $(document).ready(function() {
         };
     };
 
+    // Populate dashboard with location weather details
     function populateWeather(results) {
         $currIconEl.attr('src', results.currIconUrl);
         $currDateEl.text('(' + results.currDate + ')');
@@ -109,6 +121,7 @@ $(document).ready(function() {
         };
     };
 
+    // Call request for current and daily weather details
     function oneCallRequest(cityLat, cityLon) {
         let requestUrl = 'https://api.openweathermap.org/data/2.5/onecall?lat=' + cityLat + '&lon=' + cityLon + '&units=imperial&exclude=minutely,hourly&appid=' + apiKey;
 
@@ -141,10 +154,19 @@ $(document).ready(function() {
         });
     };
 
+    // Show info banner on input click
     $searchInput.on('click', function() {
         $infoBanner.show();
     });
 
+    // Hide info banner when click anywhere besides search input
+    $('body').click(function(event) {
+        if (!$(event.target).closest($searchInput).length) {
+            $infoBanner.hide();
+        };
+    });
+
+    // Enable search button after entering search input
     $searchInput.on('input', function() {
         $searchBtn.prop('disabled', false);
     });
@@ -169,6 +191,7 @@ $(document).ready(function() {
         }).then(function(response) {
             $errBanner.hide();
             oneCallRequest(response[0].lat, response[0].lon).then(function(respDetails) {
+                // Create location name
                 let cityName = response[0].name;
                 let cityCountry = response[0].country;
 
@@ -179,13 +202,13 @@ $(document).ready(function() {
                     $currNameEl.text(cityName + ', ' + cityCountry);
                 };
 
+                // Get location weather data
                 populateWeather(respDetails);
 
-                // Remove latest location if list gets larger than 6
-                if (weather.length === 6) {
-                    weather.pop();
-                };
+                // Refresh favorite weather data in local storage
+                refreshFavorites();
 
+                // Set JSON for searched location
                 let currentLoc = {
                     city: $currNameEl.text(),
                     temp: respDetails.currTemp,
@@ -194,10 +217,29 @@ $(document).ready(function() {
                     lon: response[0].lon
                 };
 
+                // Add serached location to local storage list
                 weather.unshift(currentLoc);
 
+                // let seen = {};
+                // $('.custom-fav').each(function() {
+                //     let txt = $(this).children().eq(0).text();
+                //     if (seen[txt]) {
+                //         $(this).remove();
+                //         weather.pop(parseInt($(this).id));
+                //     } else {
+                //         seen[txt] = true;
+                //     };
+                // })
+
+                // Remove latest location if list gets larger than 6
+                if (weather.length === 7) {
+                    weather.pop();
+                };
+
+                // Add searched location to local storage
                 localStorage.setItem('location', JSON.stringify(weather));
 
+                // Populate favorites list
                 generateFavorites();
             });
         }).catch(function(error) {
@@ -207,6 +249,18 @@ $(document).ready(function() {
                 'outline-color': 'red'
             });
             $errBanner.show();
+        });
+    });
+
+    // Populate dashboard with selected favorite
+    $(document).on('click', '.custom-fav', function() {
+        let index = parseInt(this.id);
+        oneCallRequest(weather[index].lat, weather[index].lon).then(function(respDetails) {
+            $currNameEl.text(weather[index].city);
+
+            populateWeather(respDetails);
+            refreshFavorites();
+            generateFavorites();
         });
     });
 });
