@@ -132,7 +132,7 @@ $(document).ready(function() {
             let details = {
                 lat:response.lat,
                 lon: response.lon,
-                currDate: moment.unix(response.current.dt).format('MM/DD/YYYY'),
+                currDate: moment.unix(response.current.dt).tz(response.timezone).format('MM/DD/YYYY'),
                 currTemp: response.current.temp,
                 currWind: response.current.wind_speed,
                 currHumid: response.current.humidity,
@@ -141,7 +141,7 @@ $(document).ready(function() {
             };
 
             for (let i = 1; i < 6; i++) {
-                details['fCastDate_' + i] = moment.unix(response.daily[i].dt).format('MM/DD/YYYY');
+                details['fCastDate_' + i] = moment.unix(response.daily[i].dt).tz(response.timezone).format('MM/DD/YYYY');
                 details['fCastTemp_' + i] = response.daily[i].temp.day;
                 details['fCastWind_' + i] = response.daily[i].wind_speed;
                 details['fCastHumid_' + i] = response.daily[i].humidity;
