@@ -146,7 +146,7 @@ $(document).ready(function() {
                 details['fCastWind_' + i] = response.daily[i].wind_speed;
                 details['fCastHumid_' + i] = response.daily[i].humidity;
                 details['fCastIcon_' + i] = 'http://openweathermap.org/img/w/' + response.daily[i].weather[0].icon + '.png'
-            }
+            };
 
             return details;
         }).catch(function (error) {
