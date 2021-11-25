@@ -1,5 +1,5 @@
 $(document).ready(function() {
-    const apiKey = 'dbc8f4367562773a8c66b15cdd9ed6f5';
+    const apiKey = '405566eba903091ffec2f983417e68e5';
     const $searchInput = $('#searchInput');
     const $infoBanner = $('#info');
     const $errBanner = $('#error');
@@ -217,19 +217,19 @@ $(document).ready(function() {
                     lon: response[0].lon
                 };
 
-                // Add serached location to local storage list
+                // Add searched location to local storage list
                 weather.unshift(currentLoc);
 
-                // let seen = {};
-                // $('.custom-fav').each(function() {
-                //     let txt = $(this).children().eq(0).text();
-                //     if (seen[txt]) {
-                //         $(this).remove();
-                //         weather.pop(parseInt($(this).id));
-                //     } else {
-                //         seen[txt] = true;
-                //     };
-                // })
+                // Remove any duplicate city's in favorites
+                let seen = {};
+                for (let i = 0; i < weather.length; i++) {
+                    let city = weather[i].city;
+                    if (seen[city]) {
+                        weather.pop(i);
+                    } else {
+                        seen[city] = true;
+                    }
+                }
 
                 // Remove latest location if list gets larger than 6
                 if (weather.length === 7) {
