@@ -21,8 +21,7 @@ $(document).ready(function() {
     let weather = JSON.parse(localStorage.getItem('location')) || [];
 
     // Init page
-    refreshFavorites();
-    generateFavorites();
+    updateFavorites();
 
     // Create reference list for autocomplete
     $.ajax({
@@ -49,8 +48,24 @@ $(document).ready(function() {
         });
     });
 
+    // Remove any duplicate city's in favorites
+    function updateFavorites() {
+        let seen = {};
+        for (let i = 1; i < weather.length; i++) {
+            let city = weather[i].city;
+            if (seen[city]) {
+                weather.pop(i);
+            } else {
+                seen[city] = true;
+            }
+        };
+        localStorage.setItem('location', JSON.stringify(weather));
+
+        refreshFavorites(generateFavorites);
+    };
+
     // Updates favorites in local storage with updated weather details
-    function refreshFavorites() {
+    function refreshFavorites(callback) {
         // Update existing localStorage with updated weather details
         for (let i = 0; i < weather.length; i++) {
             oneCallRequest(weather[i].lat, weather[i].lon).then(function(updateDetails) {
@@ -59,6 +74,8 @@ $(document).ready(function() {
             });
         };
         localStorage.setItem('location', JSON.stringify(weather));
+
+        callback();
     };
 
     // Generate favorites list on page
@@ -192,25 +209,24 @@ $(document).ready(function() {
             $errBanner.hide();
             oneCallRequest(response[0].lat, response[0].lon).then(function(respDetails) {
                 // Create location name
+                let location = '';
                 let cityName = response[0].name;
                 let cityCountry = response[0].country;
 
                 if ('state' in response[0]) {
                     let cityState = response[0].state;
-                    $currNameEl.text(cityName + ', ' + cityState + ', ' + cityCountry);
+                    location = cityName + ', ' + cityState + ', ' + cityCountry;
                 } else {
-                    $currNameEl.text(cityName + ', ' + cityCountry);
+                    location = cityName + ', ' + cityCountry;
                 };
+                $currNameEl.text(location);
 
                 // Get location weather data
                 populateWeather(respDetails);
 
-                // Refresh favorite weather data in local storage
-                refreshFavorites();
-
                 // Set JSON for searched location
                 let currentLoc = {
-                    city: $currNameEl.text(),
+                    city: location,
                     temp: respDetails.currTemp,
                     icon: respDetails.currIconUrl,
                     lat: response[0].lat,
@@ -219,17 +235,6 @@ $(document).ready(function() {
 
                 // Add searched location to local storage list
                 weather.unshift(currentLoc);
-
-                // Remove any duplicate city's in favorites
-                let seen = {};
-                for (let i = 0; i < weather.length; i++) {
-                    let city = weather[i].city;
-                    if (seen[city]) {
-                        weather.pop(i);
-                    } else {
-                        seen[city] = true;
-                    }
-                }
 
                 // Remove latest location if list gets larger than 6
                 if (weather.length === 7) {
@@ -240,7 +245,8 @@ $(document).ready(function() {
                 localStorage.setItem('location', JSON.stringify(weather));
 
                 // Populate favorites list
-                generateFavorites();
+                updateFavorites();
+
             });
         }).catch(function(error) {
             console.log(error);
@@ -259,8 +265,7 @@ $(document).ready(function() {
             $currNameEl.text(weather[index].city);
 
             populateWeather(respDetails);
-            refreshFavorites();
-            generateFavorites();
+            updateFavorites();
         });
     });
 });
