@@ -5,7 +5,7 @@
 <!-- Project Logo -->
 <br/>
 <div align="center">
-    <img src="./assets/images/readmelogo.png" alt="Logo" width="80" height="80">
+    <img src="./assets/img/readmelogo.png" alt="Logo" width="80" height="80">
     <h1 align="center">Weather Dashboard H6</h1>
 </div>
 
