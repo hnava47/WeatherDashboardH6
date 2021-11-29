@@ -44,6 +44,15 @@ p {
    }
 
    @media screen and (max-width: 768px){
+       body {
+        display:-ms-flexbox;
+        display:flex;
+        -ms-flex-flow:row wrap;
+        flex-flow:row wrap;
+        -ms-flex-align:center;
+        align-items:center
+       }
+       
        .col-3 {
            -ms-flex:0 0 100%;
            flex:0 0 100%;
