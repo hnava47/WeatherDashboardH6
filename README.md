@@ -23,7 +23,7 @@
 
 
 You can access the updated website at the following link:
-* [Deployed Application]()
+* [Deployed Application](https://hnava47.github.io/WeatherDashboardH6/)
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
