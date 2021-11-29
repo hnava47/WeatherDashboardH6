@@ -43,10 +43,10 @@ p {
     transform: translateY(0em);
    }
 
-   @media screen and (max-width: 768px){
+   /* @media screen and (max-width: 768px){
        .col-3 {
         -ms-flex:0 0 8.333333%;
         flex:0 0 8.333333%;
         max-width:8.333333%
        }
-   }
+   } */
