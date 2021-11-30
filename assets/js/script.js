@@ -1,5 +1,5 @@
 $(document).ready(function() {
-    const apiKey = '405566eba903091ffec2f983417e68e5';
+    const apiKey = 'dbc8f4367562773a8c66b15cdd9ed6f5';
     const $searchInput = $('#searchInput');
     const $infoBanner = $('#info');
     const $errBanner = $('#error');
