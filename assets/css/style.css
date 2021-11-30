@@ -44,24 +44,15 @@ p {
    }
 
    @media screen and (max-width: 768px){
-       body {
-           display:-ms-flexbox;
-           display:flex;
-           -ms-flex-flow:row wrap;
-           flex-flow:row wrap;
-           -ms-flex-align:center;
-           align-items:center
-       }
-
        .col {
-           -ms-flex:0 0 100%;
-           flex:0 0 100%;
-           max-width:100%
+           -ms-flex:0 0 50%;
+           flex:0 0 50%;
+           max-width:50%
        }
 
        .col-3 {
-           -ms-flex:0 0 100%;
-           flex:0 0 100%;
-           max-width:100%
+           -ms-flex:0 0 50%;
+           flex:0 0 50%;
+           max-width:50%
        }
    }
