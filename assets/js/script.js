@@ -21,7 +21,7 @@ $(document).ready(function() {
     let weather = JSON.parse(localStorage.getItem('location')) || [];
 
     // Init page
-    updateFavorites();
+    refreshFavorites(generateFavorites);
 
     // Create reference list for autocomplete
     $.ajax({
@@ -47,22 +47,6 @@ $(document).ready(function() {
             });
         });
     });
-
-    // Remove any duplicate city's in favorites
-    function updateFavorites() {
-        let seen = {};
-        for (let i = 1; i < weather.length; i++) {
-            let city = weather[i].city;
-            if (seen[city]) {
-                weather.pop(i);
-            } else {
-                seen[city] = true;
-            }
-        };
-        localStorage.setItem('location', JSON.stringify(weather));
-
-        refreshFavorites(generateFavorites);
-    };
 
     // Updates favorites in local storage with updated weather details
     function refreshFavorites(callback) {
@@ -245,7 +229,7 @@ $(document).ready(function() {
                 localStorage.setItem('location', JSON.stringify(weather));
 
                 // Populate favorites list
-                updateFavorites();
+                refreshFavorites(generateFavorites);
 
             });
         }).catch(function(error) {
@@ -265,7 +249,7 @@ $(document).ready(function() {
             $currNameEl.text(weather[index].city);
 
             populateWeather(respDetails);
-            updateFavorites();
+            refreshFavorites(generateFavorites);
         });
     });
 });
