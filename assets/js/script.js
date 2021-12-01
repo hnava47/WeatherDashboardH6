@@ -151,7 +151,7 @@ $(document).ready(function() {
                 currWind: response.current.wind_speed,
                 currHumid: response.current.humidity,
                 currUvi: response.current.uvi,
-                currIconUrl: 'http://openweathermap.org/img/w/' + response.current.weather[0].icon + '.png'
+                currIconUrl: 'https://openweathermap.org/img/w/' + response.current.weather[0].icon + '.png'
             };
 
             for (let i = 1; i < 6; i++) {
@@ -159,7 +159,7 @@ $(document).ready(function() {
                 details['fCastTemp_' + i] = response.daily[i].temp.day;
                 details['fCastWind_' + i] = response.daily[i].wind_speed;
                 details['fCastHumid_' + i] = response.daily[i].humidity;
-                details['fCastIcon_' + i] = 'http://openweathermap.org/img/w/' + response.daily[i].weather[0].icon + '.png'
+                details['fCastIcon_' + i] = 'https://openweathermap.org/img/w/' + response.daily[i].weather[0].icon + '.png'
             };
 
             return details;
@@ -197,7 +197,7 @@ $(document).ready(function() {
             cityArray[i] = cityArray[i].trim().replace(/ /g,'%20');
         };
         let cityVar = cityArray.join(',');
-        let cityValUrl = 'http://api.openweathermap.org/geo/1.0/direct?q=' + cityVar + '&appid=' + apiKey;
+        let cityValUrl = 'https://api.openweathermap.org/geo/1.0/direct?q=' + cityVar + '&appid=' + apiKey;
 
         $.ajax({
             url: cityValUrl,
