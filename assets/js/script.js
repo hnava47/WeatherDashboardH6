@@ -48,6 +48,19 @@ $(document).ready(function() {
         });
     });
 
+    // Function to remove duplicate cities
+    function removeDuplicates(cityLoc) {
+        let uniqueLs = [];
+        for (let i = 0; i < weather.length; i++) {
+            if (weather[i].city !== cityLoc) {
+                uniqueLs.push(weather[i]);
+            }
+        };
+        localStorage.removeItem('location');
+        localStorage.setItem('location', JSON.stringify(uniqueLs));
+        weather = JSON.parse(localStorage.getItem('location'));
+    };
+
     // Updates favorites in local storage with updated weather details
     function refreshFavorites(callback) {
         // Update existing localStorage with updated weather details
@@ -207,6 +220,9 @@ $(document).ready(function() {
 
                 // Get location weather data
                 populateWeather(respDetails);
+
+                // Removes duplicate cities from favorites list
+                removeDuplicates(location);
 
                 // Set JSON for searched location
                 let currentLoc = {
