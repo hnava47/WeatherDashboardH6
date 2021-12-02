@@ -27,7 +27,7 @@ $(document).ready(function() {
     $.ajax({
         dataType: 'json',
         url: './assets/js/city.list.json'
-    }).then(function(response) {
+    }).then(response => {
         // Use set to remove duplicate location names
         let citySet = new Set();
         for (var i = 0; i < response.length; i++) {
@@ -142,7 +142,7 @@ $(document).ready(function() {
         return $.ajax({
             url: requestUrl,
             method: 'GET',
-        }).then(function(response) {
+        }).then(response => {
             let details = {
                 lat:response.lat,
                 lon: response.lon,
@@ -163,7 +163,7 @@ $(document).ready(function() {
             };
 
             return details;
-        }).catch(function (error) {
+        }).catch(error => {
             console.log(error);
         });
     };
@@ -174,7 +174,7 @@ $(document).ready(function() {
     });
 
     // Hide info banner when click anywhere besides search input
-    $('body').click(function(event) {
+    $('body').click(event => {
         if (!$(event.target).closest($searchInput).length) {
             $infoBanner.hide();
         };
@@ -185,7 +185,7 @@ $(document).ready(function() {
         $searchBtn.prop('disabled', false);
     });
 
-    $searchForm.on('submit', function(event) {
+    $searchForm.on('submit', event => {
         event.preventDefault();
 
         $searchInput.css("outline-style", "none");
@@ -202,7 +202,7 @@ $(document).ready(function() {
         $.ajax({
             url: cityValUrl,
             method: 'GET'
-        }).then(function(response) {
+        }).then(response => {
             $errBanner.hide();
             oneCallRequest(response[0].lat, response[0].lon).then(function(respDetails) {
                 // Create location name
@@ -248,7 +248,7 @@ $(document).ready(function() {
                 refreshFavorites(generateFavorites);
 
             });
-        }).catch(function(error) {
+        }).catch(error => {
             console.log(error);
             $searchInput.css({
                 'outline-style': 'solid',
