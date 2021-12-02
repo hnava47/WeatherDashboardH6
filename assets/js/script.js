@@ -1,5 +1,5 @@
 $(document).ready(function() {
-    const apiKey = 'dbc8f4367562773a8c66b15cdd9ed6f5';
+    const apiKey = config.myKey;
     const $searchInput = $('#searchInput');
     const $infoBanner = $('#info');
     const $errBanner = $('#error');
